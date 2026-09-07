@@ -1,0 +1,11 @@
+﻿from pathlib import Path
+path = Path('market.html')
+text = path.read_text(encoding='utf-8')
+print('main_exists', '<main class="page-shell">' in text)
+print('script_exists', '<script src="js/app.js"></script>' in text)
+main_start = text.find('<main class="page-shell">')
+main_end = text.find('</main>', main_start)
+script_start = text.find('<script src="js/app.js"></script>')
+print('main_start', main_start, 'main_end', main_end, 'script_start', script_start)
+print(text[main_start:main_start+120])
+print(text[script_start-120:script_start])

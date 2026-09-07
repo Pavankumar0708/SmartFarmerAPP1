@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instant Loan | Smart Farmer App</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="topbar">
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-mark">ðŸŒ¾</div>
+                <div>
+                    <div>Smart Farmer App</div>
+                    <small class="muted">Loan assistance</small>
+                </div>
+            </div>
+            <button class="mobile-menu" aria-label="Toggle menu">â˜°</button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="loans.html" class="active">Loan</a>
+                <a href="store.html">Store</a>
+            </div>
+            <div class="nav-actions">
+                <a href="profile.html" class="outline-btn">Profile</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <div class="section-header">
+            <div>
+                <p class="kicker">Instant Loan Assistance</p>
+                <h2>Check eligibility and apply with confidence</h2>
+            </div>
+        </div>
+        <div class="content-grid">
+            <div class="feature-card">
+                <p class="badge">Loan eligibility</p>
+                <h3>Ready for quick support</h3>
+                <p id="loanScore">Estimated eligibility: 78%</p>
+                <p>Partner banks offer funding for irrigation, seeds, fertilizers, and farm equipment with simple documentation.</p>
+                <ul>
+                    <li>Flexible repayment schedule</li>
+                    <li>Subsidy and credit link support</li>
+                    <li>Personalized guidance from loan officers</li>
+                </ul>
+            </div>
+            <div class="form-card">
+                <p class="kicker">Apply for a loan</p>
+                <h2>Submit your application</h2>
+                <form id="loanForm">
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label for="applicantName">Applicant name</label>
+                            <input id="applicantName" name="applicantName" placeholder="Your full name" required />
+                        </div>
+                        <div class="form-row">
+                            <label for="mobile">Mobile number</label>
+                            <input id="mobile" name="mobile" placeholder="10-digit mobile" required />
+                        </div>
+                        <div class="form-row">
+                            <label for="bankName">Preferred bank</label>
+                            <select id="bankName" name="bankName" required>
+                                <option value="SBI">SBI</option>
+                                <option value="HDFC Bank">HDFC Bank</option>
+                                <option value="Cooperative Bank">Cooperative Bank</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label for="amount">Loan amount (â‚¹)</label>
+                            <input id="amount" name="amount" type="number" min="5000" step="500" required />
+                        </div>
+                        <div class="form-row" style="grid-column: 1 / -1;">
+                            <label for="purpose">Loan purpose</label>
+                            <textarea id="purpose" name="purpose" placeholder="Describe your requirement" required></textarea>
+                        </div>
+                        <div class="form-row" style="grid-column: 1 / -1;">
+                            <button class="btn" type="submit">Submit application</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="status-message"></div>
+            </div>
+        </div>
+    </main>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Smart Farmer App</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="topbar">
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-mark">🌾</div>
+                <div>
+                    <div>Smart Farmer App</div>
+                    <small class="muted">Secure access</small>
+                </div>
+            </div>
+            <button class="mobile-menu" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="weather.html">Weather</a>
+                <a href="market.html">Market</a>
+                <a href="crop-advisor.html">AI Advisor</a>
+            </div>
+            <div class="nav-actions">
+                <a href="register.html" class="outline-btn">Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <div class="form-card">
+            <p class="kicker">Secure login</p>
+            <h2>Access your farmer dashboard</h2>
+            <p class="muted">Use mobile number and password to sign in. OTP request is available for verification workflows.</p>
+            <form id="loginForm">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label for="mobile">Mobile number</label>
+                        <input id="mobile" name="mobile" placeholder="10-digit mobile" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="password">Password</label>
+                        <input id="password" name="password" type="password" placeholder="Enter your password" required />
+                    </div>
+                </div>
+                <button class="btn" type="submit">Login</button>
+            </form>
+
+            <div style="margin-top: 18px;">
+                <form id="otpForm">
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label for="otpMobile">Mobile for OTP</label>
+                            <input id="otpMobile" name="otpMobile" placeholder="10-digit mobile" required />
+                        </div>
+                        <div class="form-row">
+                            <label>&nbsp;</label>
+                            <button class="outline-btn" type="submit">Request OTP</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div id="otpVerificationSection" class="otp-section" style="display: none;">
+                    <form id="otpVerifyForm">
+                        <div class="form-grid">
+                            <div class="form-row">
+                                <label for="otpCode">Enter OTP</label>
+                                <input id="otpCode" name="otpCode" placeholder="Enter OTP" required />
+                            </div>
+                            <div class="form-row">
+                                <label>&nbsp;</label>
+                                <button class="btn" type="submit">Verify OTP</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="status-message"></div>
+            <p class="form-note">New here? <a href="register.html">Create an account</a> to unlock the full dashboard.</p>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

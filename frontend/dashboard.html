@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Smart Farmer App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --light-bg: #f8fafc;
+            --light-text: #64748b;
+            --text-dark: #1e293b;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            overflow-x: hidden;
+            font-size: 20px;
+        }
+
+        /* ============ NAVIGATION ============ */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-mark {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .outline-btn {
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid var(--primary);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .outline-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ============ MAIN CONTENT ============ */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ============ HERO SECTION ============ */
+        .dashboard-hero {
+            margin-bottom: 3rem;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(139, 92, 246, 0.05) 50%, rgba(6, 182, 212, 0.03) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            padding: 3.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.08), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-copy h1 {
+            font-size: 2.7rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-dark) 0%, var(--primary) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .kicker {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-copy p {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            line-height: 1.75;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-actions .btn,
+        .hero-actions .outline-btn {
+            font-size: 0.95rem;
+            padding: 0.6rem 1.2rem;
+        }
+
+        .hero-highlights {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .highlight-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(16, 185, 129, 0.08) 100%);
+            border-radius: 14px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.6s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(16, 185, 129, 0.2);
+            border-color: var(--primary);
+        }
+
+        .highlight-card:hover::before {
+            top: -20%;
+            right: -20%;
+        }
+
+        .highlight-card span {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .highlight-card strong {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+        }
+
+        /* ============ SECTION BLOCKS ============ */
+        .section-block {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            font-size: 1rem;
+            color: var(--light-text);
+        }
+
+        /* ============ SERVICES GRID ============ */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1.5px solid rgba(16, 185, 129, 0.1);
+            border-radius: 14px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08), transparent);
+            border-radius: 50%;
+            transition: all 0.6s ease;
+            pointer-events: none;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover::after {
+            top: -20%;
+            right: -20%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.18);
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(16, 185, 129, 0.08) 100%);
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            color: var(--text-dark);
+        }
+
+        .service-card p {
+            font-size: 1rem;
+            color: var(--light-text);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .ghost-btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid var(--primary);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .ghost-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ============ STATS GRID ============ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(139, 92, 246, 0.08) 50%, rgba(6, 182, 212, 0.05) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.15);
+            border-radius: 14px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 36px rgba(16, 185, 129, 0.12);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.6s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.2);
+            border-color: var(--primary);
+        }
+
+        .stats-card:hover::before {
+            top: -20%;
+            right: -10%;
+        }
+
+        .stats-card span {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--light-text);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .stats-card strong {
+            display: block;
+            font-size: 2.6rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        /* ============ INSIGHTS GRID ============ */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(16, 185, 129, 0.06) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.15);
+            border-left: 4px solid var(--primary);
+            border-radius: 14px;
+            padding: 1.8rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.08);
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.6s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 42px rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            border-left-color: var(--primary);
+        }
+
+        .insight-card:hover::before {
+            top: -20%;
+            right: -20%;
+        }
+
+        .insight-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .insight-card p {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            line-height: 1.75;
+        }
+
+        /* ============ ANIMATIONS ============ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .service-card {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.15s; }
+        .service-card:nth-child(3) { animation-delay: 0.2s; }
+        .service-card:nth-child(4) { animation-delay: 0.25s; }
+        .service-card:nth-child(5) { animation-delay: 0.3s; }
+        .service-card:nth-child(6) { animation-delay: 0.35s; }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .hero-card {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+
+            .hero-copy h1 {
+                font-size: 1.8rem;
+            }
+
+            .navbar {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="brand">
+                <span class="brand-mark">🌾</span>
+                <span>Smart Farming Hub</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">home</a>
+                <a href="dashboard.html" class="active">dashboard</a>
+                <a href="weather.html">weather</a>
+                <a href="market.html">market</a>
+                <a href="crop-advisor.html">ai advisor</a>
+                <a href="sell.html">sell</a>
+                <a href="videos.html">videos</a>
+                <a href="community-forum.html">community</a>
+                <a href="experts.html">experts</a>
+            </div>
+            <div class="nav-actions">
+                <a href="profile.html" class="outline-btn">profile</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="dashboard-hero">
+            <div class="hero-card">
+                <div class="hero-copy">
+                    <p class="kicker">smart farming hub</p>
+                    <h1>welcome back, <span id="heroFarmerName">farmer</span></h1>
+                    <p id="heroWeatherSummary" class="hero-subtitle">sunny skies with light breeze across your fields.</p>
+                    <div class="hero-actions">
+                        <a href="weather.html" class="btn">view weather</a>
+                        <a href="market.html" class="outline-btn">market insights</a>
+                        <a href="crop-advisor.html" class="outline-btn">ask ai advisor</a>
+                    </div>
+                </div>
+                <div class="hero-highlights">
+                    <div class="highlight-card">
+                        <span>weather intelligence</span>
+                        <strong id="heroWeatherTemp">28°c • sunny</strong>
+                    </div>
+                    <div class="highlight-card">
+                        <span>market pulse</span>
+                        <strong id="heroMarketPulse">tomato ₹28/kg</strong>
+                    </div>
+                    <div class="highlight-card">
+                        <span>crop advice</span>
+                        <strong id="heroCropAdvice">irrigate before noon</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="section-header">
+                <div>
+                    <p class="kicker">featured this week</p>
+                    <h2>agri services at a glance</h2>
+                </div>
+            </div>
+            <div class="services-grid">
+                <article class="service-card">
+                    <div class="service-icon">🌦️</div>
+                    <h3>weather intelligence</h3>
+                    <p>live forecasts, rainfall alerts, and field-ready weather updates.</p>
+                    <a href="weather.html" class="ghost-btn">open weather</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">📈</div>
+                    <h3>market insights</h3>
+                    <p>track mandi prices, crop trends, and supply alerts for top commodities.</p>
+                    <a href="market.html" class="ghost-btn">view market</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">🤖</div>
+                    <h3>ai crop advisor</h3>
+                    <p>get tailored crop guidance, pest alerts, and fertilizer recommendations.</p>
+                    <a href="crop-advisor.html" class="ghost-btn">use advisor</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">🛒</div>
+                    <h3>agri marketplace</h3>
+                    <p>buy seeds, tools, and farm inputs from trusted vendors.</p>
+                    <a href="store.html" class="ghost-btn">open store</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">💳</div>
+                    <h3>loan services</h3>
+                    <p>check eligibility and apply for farmer credit with partner banks.</p>
+                    <a href="loans.html" class="ghost-btn">apply now</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">🏛️</div>
+                    <h3>government schemes</h3>
+                    <p>explore subsidies, grants, and assistance programs for farmers.</p>
+                    <a href="schemes.html" class="ghost-btn">explore schemes</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="section-header">
+                <div>
+                    <p class="kicker">operational snapshot</p>
+                    <h2>farm performance stats</h2>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stats-card">
+                    <span>active orders</span>
+                    <strong id="kpiOrders">12</strong>
+                </div>
+                <div class="stats-card">
+                    <span>loan applications</span>
+                    <strong id="kpiLoans">3</strong>
+                </div>
+                <div class="stats-card">
+                    <span>products purchased</span>
+                    <strong id="kpiProducts">8</strong>
+                </div>
+                <div class="stats-card">
+                    <span>advisory requests</span>
+                    <strong id="kpiAdvice">5</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="section-header">
+                <div>
+                    <p class="kicker">Today’s Farm Insights</p>
+                    <h2>Alerts, market updates, and recommendations</h2>
+                </div>
+            </div>
+            <div class="insights-grid">
+                <article class="insight-card insight-weather">
+                    <h3>Weather Alerts</h3>
+                    <p id="alertMessage">Heat advisory in the afternoon. Irrigate early and protect seedlings.</p>
+                </article>
+                <article class="insight-card insight-market">
+                    <h3>Market Price Updates</h3>
+                    <p id="priceUpdates">Tomato ₹28/kg, Onion ₹18/kg, Wheat ₹1950/qtl.</p>
+                </article>
+                <article class="insight-card insight-recommendation">
+                    <h3>Farming Recommendations</h3>
+                    <p id="farmRecommendation">Schedule irrigation before 9 AM and apply organic nutrients to corn.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="section-header">
+                <div>
+                    <p class="kicker">advanced features</p>
+                    <h2>new tools to grow your farm business</h2>
+                </div>
+            </div>
+            <div class="services-grid">
+                <article class="service-card">
+                    <div class="service-icon">💰</div>
+                    <h3>direct selling</h3>
+                    <p>list your crops and connect directly with buyers. negotiate prices and track sales.</p>
+                    <a href="sell.html" class="ghost-btn">start selling</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">📹</div>
+                    <h3>learning hub</h3>
+                    <p>watch farming tutorials, pest control videos, and cultivation tips from experts.</p>
+                    <a href="videos.html" class="ghost-btn">watch videos</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">👥</div>
+                    <h3>farmer community</h3>
+                    <p>connect with other farmers, share experiences, ask questions, and learn together.</p>
+                    <a href="community-forum.html" class="ghost-btn">join forum</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">👨‍🌾</div>
+                    <h3>expert consultation</h3>
+                    <p>get one-on-one guidance from agriculture experts via chat or video call.</p>
+                    <a href="experts.html" class="ghost-btn">book expert</a>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">🎤</div>
+                    <h3>voice assistant</h3>
+                    <p>ask farming questions in hindi, telugu, or english. get instant audio responses.</p>
+                    <button class="ghost-btn" id="voiceAssistantBtn" style="cursor: pointer;">start voice</button>
+                </article>
+                <article class="service-card">
+                    <div class="service-icon">🔔</div>
+                    <h3>smart alerts</h3>
+                    <p>receive weather warnings, market updates, pest alerts, and irrigation reminders.</p>
+                    <button class="ghost-btn" id="notificationDemoBtn" style="cursor: pointer;">view alerts</button>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script src="js/advanced-features.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Government Schemes | Smart Farmer App</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="topbar">
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-mark">🌾</div>
+                <div>
+                    <div>Smart Farmer App</div>
+                    <small class="muted">Government support</small>
+                </div>
+            </div>
+            <button class="mobile-menu" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="schemes.html" class="active">Schemes</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <div class="section-header">
+            <div>
+                <p class="kicker">Government Schemes</p>
+                <h2>Latest subsidies and eligibility guidance</h2>
+            </div>
+        </div>
+        <div id="schemeGrid" class="scheme-grid"></div>
+
+        <div class="section-header" style="margin-top: 24px;">
+            <div>
+                <p class="kicker">Apply for schemes</p>
+                <h2>Submit applications and track progress</h2>
+            </div>
+        </div>
+
+        <div class="schemes-panel">
+            <div class="form-card">
+                <form id="schemeForm" class="form-grid">
+                    <label class="form-row">
+                        <span>Select scheme</span>
+                        <select id="schemeSelect" name="scheme"></select>
+                    </label>
+                    <div id="schemeDetails" class="muted">Choose a scheme to view eligibility, benefit, and application steps.</div>
+                    <label class="form-row">
+                        <span>Applicant name</span>
+                        <input type="text" id="applicantName" name="applicantName" placeholder="Full name" required />
+                    </label>
+                    <label class="form-row">
+                        <span>Mobile number</span>
+                        <input type="tel" id="applicantMobile" name="mobile" placeholder="Mobile number" required />
+                    </label>
+                    <label class="form-row">
+                        <span>Location</span>
+                        <input type="text" id="applicantLocation" name="location" placeholder="Village or district" required />
+                    </label>
+                    <label class="form-row">
+                        <span>Upload documents</span>
+                        <input type="file" id="documentUpload" name="documents" accept="image/*,.pdf" multiple />
+                    </label>
+                    <div class="form-row form-action" style="grid-column: 1 / -1;">
+                        <button type="submit" class="btn">Submit application</button>
+                    </div>
+                </form>
+                <div id="applicationStatus" class="muted">No applications yet.</div>
+            </div>
+        </div>
+    </main>
+    <script src="js/app.js"></script>
+</body>
+</html>

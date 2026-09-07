@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Crop Advisor | Smart Farmer App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/enhancements.css" />
+    <style>
+        .disease-detection-card {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 2px solid rgba(16,185,129,0.15);
+            border-left: 4px solid var(--primary, #10b981);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-top: 1.2rem;
+            box-shadow: 0 8px 24px rgba(16,185,129,0.08);
+        }
+
+        .disease-name {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--primary, #10b981);
+            margin-bottom: 0.3rem;
+        }
+
+        .confidence-score {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.8rem;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary, #10b981), var(--accent, #06b6d4));
+        }
+
+        .disease-section {
+            margin-top: 0.8rem;
+        }
+
+        .disease-section-title {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .disease-section-content {
+            color: #64748b;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .treatment-list {
+            list-style: none;
+            margin-top: 0.6rem;
+        }
+
+        .treatment-list li {
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .treatment-list li:last-child {
+            border-bottom: none;
+        }
+
+        .treatment-list li::before {
+            content: "✓ ";
+            color: var(--primary, #10b981);
+            font-weight: bold;
+            margin-right: 0.4rem;
+        }
+
+        .crop-history-chart {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+        }
+
+        .crop-history-chart h4 {
+            font-size: 0.95rem;
+            color: #1e293b;
+            margin-bottom: 0.6rem;
+        }
+
+        .crop-history-chart canvas {
+            max-height: 180px;
+        }
+
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05));
+            border: 1px solid rgba(16,185,129,0.2);
+            border-radius: 8px;
+            padding: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-card:hover {
+            background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.1));
+            border-color: var(--primary, #10b981);
+            transform: translateY(-2px);
+        }
+
+        .action-card .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .action-card .label {
+            font-size: 0.85rem;
+            color: #1e293b;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-mark">🌾</div>
+                <div>
+                    <div>Smart Farmer App</div>
+                    <small class="muted">AI advisor</small>
+                </div>
+            </div>
+            <button class="mobile-menu" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="crop-advisor.html" class="active">AI Crop Advisor</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="advisor-page">
+        <header class="advisor-page-header">
+            <div><span class="advisor-kicker">Smart farming, made simple</span><h1>AI Crop Advisor <span>✦</span></h1><p>Scan your crop and receive instant AI-powered farming recommendations.</p><div class="ai-online">● AI Online <b>•</b> Ready to Analyze</div></div>
+            <div class="advisor-illustration" aria-label="Healthy crop illustration"><div class="sun"></div><div class="plant"><i></i><i></i><b></b></div><div class="soil"></div></div>
+            <label class="language-picker">Language <select id="languageSelect"><option value="en">English</option><option value="te">తెలుగు</option><option value="hi">हिन्दी</option><option value="ta">தமிழ்</option><option value="kn">ಕನ್ನಡ</option><option value="mr">मराठी</option></select></label>
+        </header>
+        <section class="advisor-feature-row">
+            <article class="advisor-feature diagnosis"><span>◉</span><div><h3>Instant Crop Diagnosis</h3><p>Detect diseases, pests, and nutrient deficiencies in seconds.</p></div></article>
+            <article class="advisor-feature recommendation"><span>✦</span><div><h3>Smart Farming Recommendations</h3><p>Get fertilizer, irrigation, pesticide, and harvest advice.</p></div></article>
+            <article class="advisor-feature yield"><span>↗</span><div><h3>Increase Yield &amp; Profit</h3><p>Improve crop productivity and reduce crop loss.</p></div></article>
+        </section>
+        <section class="advisor-main-grid">
+            <div class="analysis-workspace">
+                <div class="workspace-title"><div><span class="advisor-kicker">Start here</span><h2>Analyze Your Crop</h2><p>Choose an option to get started</p></div><span class="secure-pill">🔒 Private &amp; secure</span></div>
+                <div class="scan-tabs"><button id="startCameraBtn" class="scan-tab active">▣ <span>Camera Scan</span></button><label class="scan-tab">⇧ <span>Upload Image<input type="file" id="cropImageUpload" accept="image/jpeg,image/png,image/heic,image/heif,image/*" /></span></label><label class="scan-tab">▧ <span>Choose From Gallery<input type="file" accept="image/*" /></span></label></div>
+                <div id="imagePreview" class="crop-dropzone"><div class="sample-crop"><span>🍃</span><span>🍅</span><span>🍃</span></div><div class="camera-orb">▣</div><h3>Click to start camera</h3><p>or drag &amp; drop image here</p><small>JPG, PNG, HEIC up to 10MB</small><video id="cameraPreview" autoplay muted playsinline></video></div>
+                <div class="dropzone-actions"><button id="capturePhotoBtn" class="outline-btn">Capture photo</button><button id="stopCameraBtn" class="ghost-btn">Stop camera</button><label class="browse-btn">↥ Browse Files<input type="file" accept="image/*" /></label></div>
+                <div id="analysisSummary" class="analysis-summary"><h4>Ready when you are</h4><p>Upload a clear leaf photo and our AI will check crop health, pests, and disease patterns.</p></div>
+            </div>
+            <aside class="result-card" id="diseaseCard">
+                <div class="result-heading"><div><span class="advisor-kicker">Latest analysis</span><h2>AI Analysis Result</h2></div><span class="healthy-badge">● Medium Risk</span></div>
+                <div class="result-crop"><div class="leaf-thumb">🍅</div><div><h3 id="diseaseName">Tomato Leaf Early Blight</h3><p>Tomato · Leaf disease detected</p></div></div>
+                <div class="score-row"><div><span>Confidence</span><strong id="confidencePercent">96%</strong></div><div><span>AI Health Score</span><strong id="healthScore">82<span>/100</span></strong></div></div><div class="confidence-bar"><div id="confidenceFill" class="confidence-fill" style="width:96%"></div></div>
+                <div class="severity"><span>Disease severity</span><b>Medium</b><div class="severity-track"><i></i><i></i><i></i></div></div>
+                <div class="symptoms"><b>Symptoms detected</b><p id="symptomsDetected">Brown spots with yellow halos on older leaves.</p></div>
+                <div class="result-actions"><button class="btn">View full report</button><button class="outline-btn">Ask an expert</button></div>
+                <div class="hidden-result-data"><span id="fertilizerAdvice">Balanced NPK + organic compost</span><span id="pestAdvice">Watch for aphids</span><span id="cropStatus">Medium Risk</span></div>
+            </aside>
+        </section>
+        <section class="recommendation-section"><div class="section-title-row"><div><span class="advisor-kicker">Your next best actions</span><h2>AI Recommendations</h2></div><button class="ghost-btn">See all recommendations →</button></div><div class="recommendation-grid"><article><span>♧</span><div><h3>Best Fertilizer</h3><p>Use balanced NPK with compost to support new leaf growth.</p><button>View guide →</button></div></article><article><span>◒</span><div><h3>Irrigation Advice</h3><p>Water at the soil line early morning. Avoid wetting leaves.</p><button>Set reminder →</button></div></article><article><span>✚</span><div><h3>Pesticide Recommendation</h3><p>Use a copper spray after removing affected leaves.</p><button>Find treatment →</button></div></article><article><span>♧</span><div><h3>Organic Treatment</h3><p>Apply neem oil every 10 days as a preventive measure.</p><button>Learn more →</button></div></article><article><span>◷</span><div><h3>Harvest Recommendation</h3><p>Inspect fruit colour daily. Harvest ripe clusters this week.</p><button>Open planner →</button></div></article></div></section>
+        <section class="advisor-lower-grid"><div class="history-panel"><div class="section-title-row"><h2>Recent Scan History</h2><button class="text-btn">View all</button></div><div class="scan-history"><article><span class="history-image tomato">🍅</span><div><b>Tomato Leaf</b><p>Early Blight · <small>2 hours ago</small></p></div><em>Disease</em><button>Details</button></article><article><span class="history-image rice">🌾</span><div><b>Rice Plant</b><p>Leaf Blast · <small>Yesterday</small></p></div><em>Disease</em><button>Details</button></article><article><span class="history-image cotton">🌿</span><div><b>Cotton Leaf</b><p>Aphid Attack · <small>3 days ago</small></p></div><em class="pest">Pest</em><button>Details</button></article><article><span class="history-image chilli">🌶</span><div><b>Chilli Plant</b><p>Healthy Crop · <small>5 days ago</small></p></div><em class="good">Healthy</em><button>Details</button></article></div></div><div class="insights-panel"><div class="section-title-row"><h2>AI Insights</h2><span class="ai-spark">✦</span></div><p><b>● Disease spread risk</b><br><span>Low this week. Remove affected leaves today.</span></p><p><b>◷ Irrigation reminder</b><br><span>Next watering window: tomorrow, 6:30 AM.</span></p><p><b>↗ Weather impact</b><br><span>Dry weather supports recovery over the next 3 days.</span></p></div></section>
+        <section class="quick-actions-section"><div class="section-title-row"><div><span class="advisor-kicker">Everything you need</span><h2>Quick Actions</h2></div></div><div class="quick-actions"><a href="store.html"><span>▣</span><b>Fertilizer Guide</b><small>Find the right inputs</small></a><a href="dashboard.html"><span>▦</span><b>Crop Calendar</b><small>Plan farm activities</small></a><a href="weather.html"><span>☼</span><b>Weather Forecast</b><small>Prepare for conditions</small></a><a href="market.html"><span>₹</span><b>Market Prices</b><small>Check crop prices</small></a><a href="schemes.html"><span>▱</span><b>Government Schemes</b><small>Discover support</small></a><a href="experts.html"><span>♧</span><b>Expert Consultation</b><small>Talk to an agronomist</small></a></div></section>
+        <section class="how-it-works"><div class="section-title-row"><div><span class="advisor-kicker">Simple by design</span><h2>How AI Crop Advisor Works</h2></div></div><div class="steps"><article><span>1</span><b>Scan Crop</b><small>Take a clear photo</small></article><i>→</i><article><span>2</span><b>AI Image Analysis</b><small>AI checks it instantly</small></article><i>→</i><article><span>3</span><b>Get Diagnosis</b><small>Receive clear results</small></article><i>→</i><article><span>4</span><b>Take Action</b><small>Follow helpful advice</small></article></div></section>
+        <section class="benefits-panel"><div><span class="advisor-kicker">Why farmers use it</span><h2>Better decisions for healthier crops</h2><div class="benefit-list"><span>✓ Detect diseases early</span><span>✓ Reduce crop loss</span><span>✓ Increase crop yield</span><span>✓ Save farming costs</span><span>✓ Get expert advice instantly</span><span>✓ Improve soil and crop health</span></div></div><div class="benefit-art">🌱</div></section>
+        <div class="chat-hidden"><div id="chatMessages"></div><div class="chat-actions"><input id="chatInput" placeholder="Ask farming questions..." /><button id="sendChatBtn" class="btn">Send</button></div><button id="voiceInputBtn" class="ghost-btn">Voice</button><div id="analysisHistory"></div></div>
+    </main>
+    <script src="js/app.js"></script>
+    <script>
+        // Initialize Disease Detection Chart
+        setTimeout(() => {
+            const ctx = document.getElementById('diseaseDetectionChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                        datasets: [{
+                            label: 'Detection Accuracy (%)',
+                            data: [78, 82, 86, 89, 92],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16,185,129,0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#10b981'
+                        }, {
+                            label: 'Disease Progress',
+                            data: [45, 52, 38, 25, 15],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239,68,68,0.05)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#ef4444',
+                            yAxisID: 'y1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { display: true, labels: { font: { size: 11 }, boxWidth: 12 } }
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                min: 0,
+                                max: 100,
+                                ticks: { font: { size: 10 } },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                min: 0,
+                                max: 100,
+                                ticks: { font: { size: 10 } },
+                                grid: { drawOnChartArea: false }
+                            },
+                            x: {
+                                ticks: { font: { size: 10 } },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Show disease card on page load for demo
+            setTimeout(() => {
+                document.getElementById('diseaseCard').style.display = 'block';
+            }, 500);
+        }, 100);
+    </script>
+</body>
+</html>

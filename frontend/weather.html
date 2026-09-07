@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather | Smart Farmer App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/enhancements.css" />
+    <style>
+        .chart-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+        }
+
+        .chart-section h3 {
+            font-size: 1rem;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .chart-line, .chart-bars {
+            position: relative;
+            height: 250px;
+        }
+
+        .weather-analytics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .weather-stat-card {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 2px solid rgba(16,185,129,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .weather-stat-card:hover {
+            border-color: var(--primary, #10b981);
+            box-shadow: 0 8px 20px rgba(16,185,129,0.12);
+            transform: translateY(-4px);
+        }
+
+        .weather-stat-card .stat-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-stat-card .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary, #10b981);
+        }
+
+        .weather-stat-card .stat-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 0.3rem;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0.75rem 0 1rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.12);
+            color: #0f766e;
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .weather-alerts-box {
+            background: linear-gradient(135deg, #fef3c7, #fef08a);
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .weather-alerts-box h4 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-alerts-box p {
+            color: #78350f;
+            font-size: 0.9rem;
+        }
+
+        .hourly-forecast {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+        }
+
+        .hourly-item {
+            text-align: center;
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: #f8fafc;
+            transition: all 0.3s;
+        }
+
+        .hourly-item:hover {
+            background: rgba(16,185,129,0.1);
+            transform: translateY(-2px);
+        }
+
+        .hourly-time {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.3rem;
+        }
+
+        .hourly-icon {
+            font-size: 1.5rem;
+            margin: 0.3rem 0;
+        }
+
+        .hourly-temp {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .chart-line, .chart-bars {
+                height: 200px;
+            }
+
+            .weather-analytics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hourly-forecast {
+                grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-mark">🌾</div>
+                <div>
+                    <div>Smart Farmer App</div>
+                    <small class="muted">Weather intelligence</small>
+                </div>
+            </div>
+            <button class="mobile-menu" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="weather.html" class="active">Weather</a>
+                <a href="market.html">Market</a>
+            </div>
+            <div class="nav-actions">
+                <a href="profile.html" class="outline-btn">Profile</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <div class="section-header">
+            <div>
+                <p class="kicker">Weather Intelligence</p>
+                <h2>Live weather insights for smarter farming</h2>
+            </div>
+        </div>
+
+        <div class="weather-grid">
+            <div id="weatherOverview" class="feature-card weather-dashboard">
+                <div class="dashboard-row">
+                    <div>
+                        <p class="badge">📍 Real-time weather updates</p>
+                    <div class="live-badge">Fresh conditions updated automatically</div>
+                    <div id="currentWeather" class="weather-temp">Loading current weather...</div>
+                    <p id="weatherSummary" class="muted">Fetching latest humidity, wind, and rain chance.</p>
+                    </div>
+                    <div class="weather-metrics">
+                        <div class="metric-card"><span>Humidity</span><strong id="humidityValue">68%</strong></div>
+                        <div class="metric-card"><span>UV Index</span><strong id="uvIndexValue">6</strong></div>
+                        <div class="metric-card"><span>Wind</span><strong id="windSpeedValue">14 km/h</strong></div>
+                        <div class="metric-card"><span>Air quality</span><strong id="airQualityValue">Good</strong></div>
+                    </div>
+                </div>
+
+                <div class="chart-section">
+                    <h3>7-day temperature forecast</h3>
+                    <div id="temperatureChart" class="chart-line"></div>
+                </div>
+
+                <div class="chart-section">
+                    <h3>Rainfall prediction</h3>
+                    <div id="rainfallChart" class="chart-bars"></div>
+                </div>
+            </div>
+
+            <div class="feature-card weather-actions">
+                <h3>Farming recommendations</h3>
+                <ul id="weatherTips" class="tip-list">
+                    <li>Use drip irrigation in the early morning to conserve moisture.</li>
+                    <li>Delay pesticide spraying until winds calm this evening.</li>
+                    <li>Harvest early in the week before the forecasted showers.</li>
+                </ul>
+                <div class="alert-box">
+                    <h4>Weather alert</h4>
+                    <p id="weatherAlerts">No severe alerts. Monitor field drainage after rainfall.</p>
+                </div>
+                <div class="insight-grid">
+                    <div class="metric-card"><span>Soil moisture</span><strong id="soilMoisture">Moderate</strong></div>
+                    <div class="metric-card"><span>Crop stress</span><strong id="cropStress">Low</strong></div>
+                    <div class="metric-card"><span>Irrigation</span><strong id="irrigationTip">Water before 9 AM</strong></div>
+                    <div class="metric-card"><span>Harvest Window</span><strong id="harvestWindow">2 days</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather Analytics Section -->
+        <div class="section-header" style="margin-top: 2rem;">
+            <div>
+                <p class="kicker">Advanced Analytics</p>
+                <h2>Detailed weather statistics and trends</h2>
+            </div>
+        </div>
+
+        <div class="weather-analytics">
+            <div class="weather-stat-card">
+                <div class="stat-icon">🌡️</div>
+                <div class="stat-value" id="avgTemp">28°C</div>
+                <div class="stat-label">Avg. Temperature</div>
+            </div>
+            <div class="weather-stat-card">
+                <div class="stat-icon">💧</div>
+                <div class="stat-value" id="totalRainfall">45 mm</div>
+                <div class="stat-label">Cumulative Rainfall</div>
+            </div>
+            <div class="weather-stat-card">
+                <div class="stat-icon">💨</div>
+                <div class="stat-value" id="maxWindSpeed">22 km/h</div>
+                <div class="stat-label">Max Wind Speed</div>
+            </div>
+            <div class="weather-stat-card">
+                <div class="stat-icon">🌅</div>
+                <div class="stat-value" id="sunshineHours">8.5 hrs</div>
+                <div class="stat-label">Sunshine Hours</div>
+            </div>
+        </div>
+
+        <!-- Humidity & Wind Analytics -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+            <div class="feature-card">
+                <h3>Humidity Trends (Weekly)</h3>
+                <div id="humidityChart" class="chart-line"></div>
+            </div>
+            <div class="feature-card">
+                <h3>Wind Speed Analysis</h3>
+                <div id="windChart" class="chart-line"></div>
+            </div>
+        </div>
+
+        <!-- Hourly Forecast -->
+        <div style="margin-top: 2rem;">
+            <div class="section-header">
+                <div>
+                    <p class="kicker">Hourly Forecast</p>
+                    <h2>Next 24 hours weather breakdown</h2>
+                </div>
+            </div>
+            <div class="hourly-forecast" id="hourlyForecast">
+                <div class="hourly-item">
+                    <div class="hourly-time">Now</div>
+                    <div class="hourly-icon">☀️</div>
+                    <div class="hourly-temp">31°C</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="hourly-time">3 PM</div>
+                    <div class="hourly-icon">🌤️</div>
+                    <div class="hourly-temp">30°C</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="hourly-time">6 PM</div>
+                    <div class="hourly-icon">⛅</div>
+                    <div class="hourly-temp">27°C</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="hourly-time">9 PM</div>
+                    <div class="hourly-icon">🌙</div>
+                    <div class="hourly-temp">25°C</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="hourly-time">12 AM</div>
+                    <div class="hourly-icon">⭐</div>
+                    <div class="hourly-temp">23°C</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="hourly-time">3 AM</div>
+                    <div class="hourly-icon">🌙</div>
+                    <div class="hourly-temp">22°C</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="hourly-time">6 AM</div>
+                    <div class="hourly-icon">🌄</div>
+                    <div class="hourly-temp">21°C</div>
+                </div>
+                <div class="hourly-item">
+                    <div class="hourly-time">9 AM</div>
+                    <div class="hourly-icon">☀️</div>
+                    <div class="hourly-temp">26°C</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-top: 24px;">
+
+            <div>
+                <p class="kicker">Weekly outlook</p>
+                <h2>Detailed 7-day forecast</h2>
+                <p class="section-copy">Plan your fieldwork with a clear daily outlook that highlights highs, rain chances, and the best windows for farming tasks.</p>
+            </div>
+        </div>
+        <div id="forecastCards" class="forecast-row"></div>
+    </main>
+    <script src="js/app.js"></script>
+    <script>
+        // Initialize Weather Charts
+        setTimeout(() => {
+            // Temperature Trend Chart
+            const tempCtx = document.getElementById('temperatureChart');
+            if (tempCtx && tempCtx.parentElement) {
+                const tempCanvas = document.createElement('canvas');
+                tempCtx.parentElement.replaceChild(tempCanvas, tempCtx);
+                new Chart(tempCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'High (°C)',
+                            data: [32, 31, 30, 28, 29, 31, 33],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239,68,68,0.05)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#ef4444'
+                        }, {
+                            label: 'Low (°C)',
+                            data: [22, 21, 20, 19, 20, 22, 23],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59,130,246,0.05)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#3b82f6'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { display: true, labels: { font: { size: 11 } } }
+                        },
+                        scales: {
+                            y: { min: 15, max: 35, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+
+            // Rainfall Chart
+            const rainCtx = document.getElementById('rainfallChart');
+            if (rainCtx && rainCtx.parentElement) {
+                const rainCanvas = document.createElement('canvas');
+                rainCtx.parentElement.replaceChild(rainCanvas, rainCtx);
+                new Chart(rainCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Rainfall (mm)',
+                            data: [5, 8, 12, 2, 0, 6, 10],
+                            backgroundColor: ['#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6'],
+                            borderRadius: 6,
+                            borderSkipped: false
+                        }, {
+                            label: 'Rain Probability (%)',
+                            data: [25, 35, 60, 15, 5, 30, 45],
+                            backgroundColor: 'rgba(59,130,246,0.3)',
+                            borderColor: '#3b82f6',
+                            type: 'line',
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: { legend: { display: true, labels: { font: { size: 11 } } } },
+                        scales: {
+                            y: { position: 'left', min: 0, max: 15, grid: { color: 'rgba(0,0,0,0.05)' } },
+                            y1: { position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // Humidity Trend Chart
+            const humidityCtx = document.getElementById('humidityChart');
+            if (humidityCtx && humidityCtx.parentElement) {
+                const humidityCanvas = document.createElement('canvas');
+                humidityCtx.parentElement.replaceChild(humidityCanvas, humidityCtx);
+                new Chart(humidityCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Humidity (%)',
+                            data: [65, 68, 72, 70, 62, 60, 68],
+                            borderColor: '#06b6d4',
+                            backgroundColor: 'rgba(6,182,212,0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#06b6d4'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { min: 40, max: 90, grid: { color: 'rgba(0,0,0,0.05)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // Wind Speed Chart
+            const windCtx = document.getElementById('windChart');
+            if (windCtx && windCtx.parentElement) {
+                const windCanvas = document.createElement('canvas');
+                windCtx.parentElement.replaceChild(windCanvas, windCtx);
+                new Chart(windCanvas, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Wind Speed (km/h)',
+                            data: [12, 14, 18, 16, 10, 8, 14],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245,158,11,0.1)',
+                            pointBackgroundColor: '#f59e0b',
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            r: { beginAtZero: true, max: 25, ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+        }, 100);
+    </script>
+</body>
+</html>

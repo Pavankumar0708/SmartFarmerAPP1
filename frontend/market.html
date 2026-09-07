@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Market Prices | Smart Farmer App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/enhancements.css" />
+    <style>
+        .crop-analytics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .crop-card {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 2px solid rgba(16,185,129,0.1);
+            border-radius: 12px;
+            padding: 1.2rem;
+            box-shadow: 0 8px 24px rgba(16,185,129,0.06);
+            transition: all 0.3s;
+        }
+
+        .crop-card:hover {
+            border-color: var(--primary, #10b981);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 35px rgba(16,185,129,0.15);
+        }
+
+        .crop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .crop-name {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        .crop-icon {
+            font-size: 1.5rem;
+        }
+
+        .crop-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary, #10b981);
+            margin-bottom: 0.4rem;
+        }
+
+        .price-change {
+            font-size: 0.85rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.6rem;
+        }
+
+        .price-up {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        .price-down {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .crop-chart {
+            height: 120px;
+            margin: 0.8rem 0;
+        }
+
+        .crop-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin-top: 0.8rem;
+        }
+
+        .stat-item {
+            padding: 0.6rem;
+            background: rgba(16,185,129,0.05);
+            border-radius: 6px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .market-insights {
+            background: linear-gradient(135deg, #f0fdf4, #f1f5f9);
+            border: 2px solid rgba(16,185,129,0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .market-insights h3 {
+            font-size: 1.2rem;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .insight-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .insight-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+        }
+
+        .insight-item h4 {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-item p {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .performance-chart {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 8px 24px rgba(16,185,129,0.06);
+        }
+
+        .performance-chart h3 {
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .performance-chart canvas {
+            max-height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .crop-analytics {
+                grid-template-columns: 1fr;
+            }
+
+            .crop-chart {
+                height: 100px;
+            }
+
+            .insight-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-mark">🌾</div>
+                <div>
+                    <div>Smart Farmer App</div>
+                    <small class="muted">Market intelligence</small>
+                </div>
+            </div>
+            <button class="mobile-menu" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="weather.html">Weather</a>
+                <a href="market.html" class="active">Market</a>
+            </div>
+            <div class="nav-actions">
+                <a href="profile.html" class="outline-btn">Profile</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <div class="section-header">
+            <div>
+                <p class="kicker">Market Price Tracking</p>
+                <h2>Daily crop prices and nearby mandi insights</h2>
+            </div>
+        </div>
+
+        <section class="market-intelligence" aria-labelledby="marketTrendsTitle">
+            <div class="market-intelligence-header">
+                <div>
+                    <div class="live-status"><span></span> Live <b>•</b> Updated 5 minutes ago</div>
+                    <h2 id="marketTrendsTitle">Market Trends</h2>
+                    <p>Track price momentum and make your next selling decision with confidence.</p>
+                </div>
+                <label class="crop-picker">Crop
+                    <select id="intelligenceCrop">
+                        <option>Tomato</option><option>Onion</option><option>Wheat</option><option>Rice</option><option>Cotton</option><option>Maize</option>
+                    </select>
+                </label>
+            </div>
+            <div class="time-filters" id="marketTimeFilters" aria-label="Chart time period">
+                <button class="time-filter" data-period="today">Today</button>
+                <button class="time-filter active" data-period="7-days">7 Days</button>
+                <button class="time-filter" data-period="30-days">30 Days</button>
+                <button class="time-filter" data-period="3-months">3 Months</button>
+            </div>
+            <div class="market-summary-grid">
+                <div class="market-stat"><span>Average Price</span><strong id="averagePrice">₹27.7</strong><small>Selected period</small></div>
+                <div class="market-stat"><span>Highest Price Today</span><strong id="highestPrice">₹28.6</strong><small>Peak mandi quote</small></div>
+                <div class="market-stat"><span>Lowest Price Today</span><strong id="lowestPrice">₹27.2</strong><small>Lowest mandi quote</small></div>
+                <div class="market-stat"><span>Weekly Change</span><strong id="weeklyChange" class="positive">+12.6%</strong><small>Compared with last week</small></div>
+            </div>
+            <div class="market-chart-layout">
+                <div class="market-chart-panel">
+                    <div class="panel-heading"><div><span class="eyebrow">Price movement</span><h3 id="chartCropName">Tomato price</h3></div><span class="chart-unit" id="chartUnit">₹/kg</span></div>
+                    <div class="main-chart-wrap"><canvas id="marketTrendChart" aria-label="Crop price trend chart"></canvas></div>
+                </div>
+                <aside class="forecast-panel">
+                    <div class="panel-heading"><div><span class="eyebrow">AI forecast</span><h3>Next 3 days</h3></div><span class="forecast-icon">✦</span></div>
+                    <div class="forecast-chart-wrap"><canvas id="priceForecastChart" aria-label="AI price forecast chart"></canvas></div>
+                    <div class="forecast-values"><span>Tomorrow <strong id="forecastDayOne">₹28.9</strong></span><span>In 2 days <strong id="forecastDayTwo">₹29.3</strong></span><span>In 3 days <strong id="forecastDayThree">₹29.8</strong></span></div>
+                </aside>
+            </div>
+            <div class="market-bottom-grid">
+                <div class="ai-insight-panel"><div class="ai-title"><span>✦</span><div><span class="eyebrow">AI market insight</span><h3>What the market is telling you</h3></div></div><p id="marketInsight">Tomato prices are rising due to lower supply.</p><p id="marketOpportunity" class="insight-opportunity">Best selling opportunity: Mumbai Mandi.</p><div class="insight-foot"><span>↗</span><span id="marketForecastNote">Expected price increase in the next 3 days.</span></div></div>
+                <div class="mandi-panel"><div class="panel-heading"><div><span class="eyebrow">Nearby prices</span><h3>Mandi comparison</h3></div><span class="location-icon">⌖</span></div><div class="mandi-list"><div><strong>Hyderabad</strong><span>12 km</span><b>₹28/kg</b></div><div><strong>Warangal</strong><span>35 km</span><b>₹30/kg</b></div><div><strong>Vijayawada</strong><span>48 km</span><b>₹29/kg</b></div></div></div>
+            </div>
+            <div class="market-winners"><div class="winner-card gain"><span class="winner-arrow">↑</span><div><span>Top gainer</span><strong id="topGainer">Tomato <em>+4.2%</em></strong></div><span class="winner-label">This week</span></div><div class="winner-card loss"><span class="winner-arrow">↓</span><div><span>Top loser</span><strong id="topDecliner">Onion <em>-2.1%</em></strong></div><span class="winner-label">This week</span></div></div>
+        </section>
+
+        <!-- Crop Performance Analytics -->
+        <div class="section-header" style="margin-top: 2rem;">
+            <div>
+                <p class="kicker">Crop Performance</p>
+                <h2>Price trends and market analytics for major crops</h2>
+            </div>
+        </div>
+
+        <div class="crop-analytics">
+            <div class="crop-card">
+                <div class="crop-header">
+                    <div class="crop-name">🍅 Tomato</div>
+                    <div class="crop-icon">📈</div>
+                </div>
+                <div class="crop-price">₹28/kg</div>
+                <div class="price-change price-up">↑ 4.2% this week</div>
+                <div class="crop-chart">
+                    <canvas id="tomatoChart"></canvas>
+                </div>
+                <div class="crop-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Min</div>
+                        <div class="stat-value">₹24</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Max</div>
+                        <div class="stat-value">₹32</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crop-card">
+                <div class="crop-header">
+                    <div class="crop-name">🧅 Onion</div>
+                    <div class="crop-icon">📉</div>
+                </div>
+                <div class="crop-price">₹18/kg</div>
+                <div class="price-change price-down">↓ 2.1% this week</div>
+                <div class="crop-chart">
+                    <canvas id="onionChart"></canvas>
+                </div>
+                <div class="crop-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Min</div>
+                        <div class="stat-value">₹15</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Max</div>
+                        <div class="stat-value">₹22</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crop-card">
+                <div class="crop-header">
+                    <div class="crop-name">🌾 Wheat</div>
+                    <div class="crop-icon">📊</div>
+                </div>
+                <div class="crop-price">₹1950/qtl</div>
+                <div class="price-change price-up">↑ 1.5% this week</div>
+                <div class="crop-chart">
+                    <canvas id="wheatChart"></canvas>
+                </div>
+                <div class="crop-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Min</div>
+                        <div class="stat-value">₹1850</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Max</div>
+                        <div class="stat-value">₹2050</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crop-card">
+                <div class="crop-header">
+                    <div class="crop-name">🍚 Rice</div>
+                    <div class="crop-icon">📈</div>
+                </div>
+                <div class="crop-price">₹2200/qtl</div>
+                <div class="price-change price-up">↑ 3.0% this week</div>
+                <div class="crop-chart">
+                    <canvas id="riceChart"></canvas>
+                </div>
+                <div class="crop-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Min</div>
+                        <div class="stat-value">₹2100</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Max</div>
+                        <div class="stat-value">₹2300</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Insights -->
+        <div class="market-insights">
+            <h3>📊 Market Insights & Trends</h3>
+            <div class="insight-row">
+                <div class="insight-item">
+                    <h4>🔥 High Demand Crops</h4>
+                    <p>Tomato and Rice are seeing strong buyer interest. Best time to sell if you have surplus.</p>
+                </div>
+                <div class="insight-item">
+                    <h4>📉 Oversupply Alert</h4>
+                    <p>Onion supply has increased 15% this month. Prices may soften further next week.</p>
+                </div>
+                <div class="insight-item">
+                    <h4>🎯 Seller Opportunity</h4>
+                    <p>Wheat showing stable prices with good margins. Hold for better prices next month.</p>
+                </div>
+                <div class="insight-item">
+                    <h4>💰 Profit Maximize</h4>
+                    <p>Best profit margins are in Tomato (4%) and Rice (3%). Avoid Onion right now.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crop Performance Chart -->
+        <div class="performance-chart">
+            <h3>30-Day Market Performance Comparison</h3>
+            <canvas id="performanceChart" style="max-height: 300px;"></canvas>
+        </div>
+
+    </main>
+    <script src="js/app.js"></script>
+    <script>
+        // Initialize Market Charts
+        setTimeout(() => {
+            // Tomato Price Chart
+            const tomatoCtx = document.getElementById('tomatoChart');
+            if (tomatoCtx) {
+                new Chart(tomatoCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Price (₹/kg)',
+                            data: [26, 26.5, 27, 27.5, 28, 27.8, 28],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239,68,68,0.08)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#ef4444'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { min: 24, max: 30, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+                        }
+                    }
+                });
+            }
+
+            // Onion Price Chart
+            const onionCtx = document.getElementById('onionChart');
+            if (onionCtx) {
+                new Chart(onionCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Price (₹/kg)',
+                            data: [19, 18.8, 18.5, 18.2, 18, 18.1, 18],
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139,92,246,0.08)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#8b5cf6'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { min: 16, max: 22, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+                        }
+                    }
+                });
+            }
+
+            // Wheat Price Chart
+            const wheatCtx = document.getElementById('wheatChart');
+            if (wheatCtx) {
+                new Chart(wheatCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Price (₹/qtl)',
+                            data: [1920, 1930, 1940, 1945, 1950, 1948, 1950],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245,158,11,0.08)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#f59e0b'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { min: 1900, max: 1970, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+                        }
+                    }
+                });
+            }
+
+            // Rice Price Chart
+            const riceCtx = document.getElementById('riceChart');
+            if (riceCtx) {
+                new Chart(riceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Price (₹/qtl)',
+                            data: [2130, 2150, 2170, 2190, 2200, 2205, 2200],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16,185,129,0.08)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#10b981'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { min: 2100, max: 2250, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+                        }
+                    }
+                });
+            }
+
+            // Performance Chart (Multi-line comparison)
+            const perfCtx = document.getElementById('performanceChart');
+            if (perfCtx) {
+                new Chart(perfCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+                        datasets: [
+                            {
+                                label: 'Tomato',
+                                data: [26, 26.5, 27.2, 27.8, 28.3, 28.5, 28],
+                                borderColor: '#ef4444',
+                                backgroundColor: 'rgba(239,68,68,0.05)',
+                                tension: 0.4,
+                                fill: true
+                            },
+                            {
+                                label: 'Onion',
+                                data: [19.2, 19, 18.8, 18.5, 18.2, 18, 18],
+                                borderColor: '#8b5cf6',
+                                backgroundColor: 'rgba(139,92,246,0.05)',
+                                tension: 0.4,
+                                fill: true
+                            },
+                            {
+                                label: 'Wheat',
+                                data: [1910, 1920, 1930, 1940, 1945, 1948, 1950],
+                                borderColor: '#f59e0b',
+                                backgroundColor: 'rgba(245,158,11,0.05)',
+                                tension: 0.4,
+                                fill: true
+                            },
+                            {
+                                label: 'Rice',
+                                data: [2100, 2130, 2160, 2180, 2195, 2205, 2200],
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16,185,129,0.05)',
+                                tension: 0.4,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { display: true, labels: { font: { size: 11 }, boxWidth: 12, usePointStyle: true } }
+                        },
+                        scales: {
+                            y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+        }, 100);
+    </script>
+</body>
+</html>

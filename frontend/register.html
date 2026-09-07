@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register | Smart Farmer App</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="topbar">
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-mark">🌾</div>
+                <div>
+                    <div>Smart Farmer App</div>
+                    <small class="muted">Farmer onboarding</small>
+                </div>
+            </div>
+            <button class="mobile-menu" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="weather.html">Weather</a>
+                <a href="market.html">Market</a>
+            </div>
+            <div class="nav-actions">
+                <a href="login.html" class="outline-btn">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <div class="form-card">
+            <p class="kicker">Registration</p>
+            <h2>Create your Smart Farmer profile</h2>
+            <p class="muted">Mobile number, Aadhaar validation, and secure account setup are enabled for demo access.</p>
+            <form id="registerForm">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label for="name">Full name</label>
+                        <input id="name" name="name" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="mobile">Mobile number</label>
+                        <input id="mobile" name="mobile" pattern="[0-9]{10}" placeholder="10 digits" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="aadhaar">Aadhaar number</label>
+                        <input id="aadhaar" name="aadhaar" pattern="[0-9]{12}" placeholder="12 digits" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="village">Village / Location</label>
+                        <input id="village" name="village" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="landSize">Land size (acres)</label>
+                        <input id="landSize" name="landSize" type="number" min="0.1" step="0.1" required />
+                    </div>
+                    <div class="form-row">
+                        <label for="crop">Primary crop</label>
+                        <select id="crop" name="crop">
+                            <option>Wheat</option>
+                            <option>Rice</option>
+                            <option>Tomato</option>
+                            <option>Mango</option>
+                            <option>Pulses</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="password">Create password</label>
+                        <input id="password" name="password" type="password" minlength="8" required />
+                    </div>
+                    <div class="form-row">
+                        <label>&nbsp;</label>
+                        <button class="btn" type="submit">Register account</button>
+                    </div>
+                </div>
+            </form>
+            <div class="status-message"></div>
+            <p class="form-note">Your account data is demo-ready. Use the backend APIs for full persistence when you connect MySQL.</p>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

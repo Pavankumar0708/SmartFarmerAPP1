@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer Community | Smart Farmer App</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/advanced-features.css" />
+</head>
+<body>
+    <header class="topbar"><nav class="navbar"><div class="brand"><div class="brand-mark">🌿</div><div><div>Smart Farmer</div><small class="muted">Empowering farmers</small></div></div><button class="mobile-menu" aria-label="Toggle menu">☰</button><div class="nav-links"><a href="index.html">Home</a><a href="dashboard.html">Dashboard</a><a href="community.html" class="active">Community</a><a href="experts.html">Experts</a><a href="weather.html">Weather</a><a href="market.html">Market</a><a href="videos.html">More⌄</a></div><div class="community-nav-actions"><button aria-label="Search">⌕</button><button aria-label="Notifications">♧<sup>3</sup></button><span>👨🏽‍🌾 <b>Ramesh</b></span></div></nav></header>
+    <main class="community-page">
+        <section class="community-hero"><div><span class="community-kicker">Learn together, grow together</span><h1>Farmer Community <em>✦</em></h1><p>Share experiences, ask questions, and learn from farmers and experts across India.</p></div><div class="community-landscape" aria-label="Illustration of fields and a tractor"><span>☁</span><i>⌂</i><b>🌳 🌳</b><strong>🚜</strong></div></section>
+        <div class="community-layout">
+            <aside class="community-left"><section class="community-card"><div class="community-card-title"><h2>Trending Topics</h2><span>↗</span></div><div id="trendingTopics" class="topic-list"></div><button class="view-topics">View all topics</button></section><section class="community-card guidelines"><h2>Community Guidelines</h2><p>✓ Be respectful and supportive</p><p>✓ Share real and helpful information</p><p>✓ No spam or self-promotion</p><p>✓ Follow agricultural best practices</p><a href="#communityGuidelines">Learn more →</a></section></aside>
+            <section class="community-center"><section class="create-post-card"><div class="post-avatar">👨🏽‍🌾</div><div class="post-composer"><textarea id="postContent" placeholder="Share your farming experience, ask a question, or post a tip..."></textarea><div class="composer-actions"><label>▣ Add Photo<input type="file" accept="image/*" /></label><label>▸ Add Video<input type="file" accept="video/*" /></label><button type="button">? Ask Question</button><button id="voicePostBtn" type="button">♩</button><button class="btn" id="submitPostBtn" type="button">Post</button></div></div></section><div class="community-filters"><button class="filter-tag active" data-filter="recent">▤ Recent</button><button class="filter-tag" data-filter="popular">♨ Popular</button><button class="filter-tag" data-filter="questions">? Questions</button><button class="filter-tag" data-filter="tips">♧ Tips</button><button class="filter-tag" data-filter="expert">✦ Expert Answers</button><button class="filter-tag" data-filter="mine">♙ My Posts</button></div><div id="postsFeed" class="community-posts"></div></section>
+            <aside class="community-right"><section class="community-card expert-card-panel"><div class="community-card-title"><h2>Expert Help</h2><a href="experts.html">View all</a></div><div class="expert-mini"><span>👩🏽‍🔬</span><div><b>Dr. Anjali Verma</b><small>Plant Pathologist</small><em>● Online</em></div><button>Ask Expert</button></div><div class="expert-mini"><span>👨🏽‍🔬</span><div><b>Dr. Ravi Kumar</b><small>Soil Specialist</small><em>● Online</em></div><button>Ask Expert</button></div><div class="expert-mini"><span>👩🏽‍🌾</span><div><b>Dr. Meera Singh</b><small>Agricultural Scientist</small><em>● Online</em></div><button>Ask Expert</button></div></section><section class="community-card"><div class="community-card-title"><h2>Announcements</h2><a href="#announcements">View all</a></div><div id="announcements" class="announcement-list"></div></section><section class="community-card language-card"><h2>Language / भाषा / భాష</h2><select id="communityLanguage"><option>English</option><option>हिंदी</option><option>తెలుగు</option></select></section></aside>
+        </div>
+        <section class="community-trust"><span>✓</span><div><b>Trusted Farming Information</b><small>Verified by experts and experienced farmers</small></div></section><button class="new-post-floating" type="button" onclick="document.querySelector('#postContent').focus()">＋ New Post</button>
+    </main>
+    <script src="js/app.js"></script><script src="js/advanced-features.js"></script>
+</body>
+</html>

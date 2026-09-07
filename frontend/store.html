@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Commerce Store | Smart Farmer App</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header class="topbar">
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-mark">🌾</div>
+                <div>
+                    <div>Smart Farmer App</div>
+                    <small class="muted">Farm supplies store</small>
+                </div>
+            </div>
+            <button class="mobile-menu" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="store.html" class="active">Store</a>
+                <a href="community.html">Community</a>
+            </div>
+            <div class="nav-actions">
+                <a href="profile.html" class="outline-btn">Profile</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="store-page">
+        <div class="status-message" role="status" aria-live="polite"></div>
+        <section class="store-hero"><div><span class="store-kicker">Smart Farmer Marketplace</span><h1>Everything You Need<br>for a <em>Better Harvest</em></h1><p>Quality seeds, fertilizers, farm tools, irrigation products, and organic essentials delivered across India.</p><div class="hero-badges"><span>✓ Trusted by Farmers</span><span>✓ Quality Assured</span><span>✓ Fast Delivery</span></div><button class="btn hero-shop" onclick="document.querySelector('#featuredProducts').scrollIntoView({behavior:'smooth'})">Shop products →</button></div><div class="hero-products"><span class="hero-product seed">🌾</span><span class="hero-product bag">🌱</span><span class="hero-product spray">🧴</span><span class="hero-product tool">🛠</span></div></section>
+        <section class="store-toolbar"><div class="store-search"><span>⌕</span><input id="productSearch" placeholder="Search products, brands, or categories" /></div><select id="categoryFilter"><option value="all">All categories</option><option>Seeds</option><option>Fertilizers</option><option>Plant Protection</option><option>Tools &amp; Equipment</option><option>Irrigation</option><option>Organic Products</option><option>Farm Machinery</option><option>Animal Care</option><option>Farm Accessories</option><option>Crop Nutrition</option></select><select id="sortProducts"><option value="popular">Sort: Popular</option><option value="price-low">Price: Low to high</option><option value="price-high">Price: High to low</option><option value="rating">Top rated</option><option value="newest">Newest</option></select><button class="cart-toggle" type="button" onclick="document.querySelector('#storeCart').classList.toggle('open')">🛒 Cart <b id="cartCount">0</b></button></section>
+        <section class="category-strip"><div class="store-section-heading"><div><span class="store-kicker">Shop by need</span><h2>Explore Categories</h2></div></div><div class="category-grid"><button data-category="Seeds"><span>🌾</span><b>Seeds</b><small>5 products</small></button><button data-category="Fertilizers"><span>🌱</span><b>Fertilizers</b><small>5 products</small></button><button data-category="Plant Protection"><span>🛡</span><b>Pesticides</b><small>5 products</small></button><button data-category="Tools & Equipment"><span>🛠</span><b>Tools &amp; Equipment</b><small>5 products</small></button><button data-category="Irrigation"><span>💧</span><b>Irrigation</b><small>5 products</small></button><button data-category="Organic Products"><span>♧</span><b>Organic Products</b><small>5 products</small></button><button data-category="Farm Machinery"><span>🚜</span><b>Farm Machinery</b><small>5 products</small></button><button data-category="Animal Care"><span>🐄</span><b>Animal Care</b><small>5 products</small></button><button data-category="Farm Accessories"><span>🧺</span><b>Farm Accessories</b><small>5 products</small></button><button data-category="Crop Nutrition"><span>🧪</span><b>Crop Nutrition</b><small>5 products</small></button></div></section>
+        <section id="featuredProducts" class="store-products-section"><div class="store-section-heading"><div><span class="store-kicker">Curated for your farm</span><h2>Featured Products</h2></div><span class="results-note" id="productResults">6 products</span></div><div id="productList" class="store-product-grid"></div></section>
+        <section class="offers-section"><div class="store-section-heading"><div><span class="store-kicker">Save more on every order</span><h2>Best Offers for Farmers</h2></div></div><div class="offer-grid"><article><b>BUY 2 GET 1</b><h3>Seed season special</h3><p>Stock up on hybrid vegetable seeds for your next cycle.</p><button>Explore seeds →</button></article><article><b>UP TO 25% OFF</b><h3>Organic farming week</h3><p>Better soil starts with certified natural inputs.</p><button>Shop organic →</button></article><article><b>COMBO SAVINGS</b><h3>Complete crop care packs</h3><p>Save on fertilizer, protection, and harvest essentials.</p><button>View combos →</button></article></div></section>
+        <section class="why-shop"><div class="store-section-heading"><div><span class="store-kicker">A marketplace you can trust</span><h2>Why Shop With Us?</h2></div></div><div class="benefit-grid"><div><span>✓</span><b>100% Original</b><p>Verified products from trusted brands.</p></div><div><span>₹</span><b>Affordable Prices</b><p>Fair prices made for farmers.</p></div><div><span>▣</span><b>Fast &amp; Safe Delivery</b><p>Reliable delivery across India.</p></div><div><span>↩</span><b>Easy Returns</b><p>Simple support when you need it.</p></div><div><span>♧</span><b>Expert Support</b><p>Advice from agriculture experts.</p></div></div></section>
+        <section class="store-bottom-grid"><div class="reviews-panel"><div class="store-section-heading"><h2>What Farmers Say</h2><span>★★★★★ 4.8/5</span></div><article class="review"><span>👨🏽‍🌾</span><div><b>Ramesh Kumar · Warangal</b><strong>★★★★★</strong><p>“The tomato seeds had excellent germination. Delivery reached my village in three days.”</p><small>Purchased: Hybrid Tomato Seeds</small></div></article></div><div class="expert-help"><span class="store-kicker">Here when you need us</span><h2>Need Help Choosing Products?</h2><p>Chat with agriculture experts in Telugu, Hindi, or English.</p><div><button class="btn">Chat with expert</button><button class="outline-btn">Call support</button></div></div></section>
+        <section class="delivery-strip"><span>🚚 Free delivery above ₹999</span><span>🔒 Secure payments</span><span>↩ Easy returns</span><span>◉ 24/7 farmer support</span><span>✦ AI shopping assistant</span></section>
+        <aside id="storeCart" class="store-cart"><div class="cart-header"><div><span class="store-kicker">Your basket</span><h2>Shopping Cart</h2></div><button type="button" onclick="document.querySelector('#storeCart').classList.remove('open')">×</button></div><ul id="cartItems" class="cart-items"></ul><div class="coupon"><input id="couponCode" placeholder="Coupon code" /><button id="applyCoupon" type="button">Apply</button></div><div class="cart-totals"><span>Delivery <b>Free</b></span><span>Discount <b id="discountValue">- ₹0</b></span><strong>Total <b id="cartTotal">₹0</b></strong></div><button class="btn checkout-btn" id="checkoutButton" type="button">Proceed to checkout →</button><small class="payment-note">UPI · PhonePe · Google Pay · Cash on Delivery</small></aside>
+        <div id="productModal" class="product-modal" aria-hidden="true"><div class="product-modal-card"><button class="modal-close" type="button">×</button><div id="modalProductContent"></div></div></div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
